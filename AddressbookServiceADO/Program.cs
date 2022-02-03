@@ -7,6 +7,7 @@ namespace AddressbookServiceADO
         {
             AdrressbookRepo repo = new AdrressbookRepo();
             repo.coonectionString();
+            repo.GetAllContact();
         }
     }
 }
