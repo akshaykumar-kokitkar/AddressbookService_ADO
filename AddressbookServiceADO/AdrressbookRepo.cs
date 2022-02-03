@@ -1,4 +1,5 @@
 ﻿using System.Data.SqlClient;
+using System.Data;
 
 namespace AddressbookServiceADO
 {
@@ -75,6 +76,46 @@ namespace AddressbookServiceADO
             {
                 connection.Close();
             }
+        }
+        public bool AddContact(AddressbookModel model)
+        {
+            SqlConnection connection = new SqlConnection(connectionString);
+            try
+            {
+                using (connection)
+                {
+                    SqlCommand cmd = new SqlCommand("dbo.spaddress_book",connection);
+
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@firstname", model.first_name);
+                    cmd.Parameters.AddWithValue("@lastname", model.last_name);
+                    cmd.Parameters.AddWithValue("@address", model.address);
+                    cmd.Parameters.AddWithValue("@city", model.city);
+                    cmd.Parameters.AddWithValue("@state", model.state);
+                    cmd.Parameters.AddWithValue("@zip", model.zip);
+                    cmd.Parameters.AddWithValue("@phone", model.phone);
+                    cmd.Parameters.AddWithValue("@email", model.email);
+                    cmd.Parameters.AddWithValue("@type", model.type);
+                    cmd.Parameters.AddWithValue("@name", model.name);
+
+                    connection.Open();
+                    var result = cmd.ExecuteNonQuery();
+                    connection.Close();
+                    if (result != 0)
+                        return true;
+                    return false;
+                }
+                
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                connection.Close ();
+            }
+            return true;
         }
     }
 }
